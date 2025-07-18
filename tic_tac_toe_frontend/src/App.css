@@ -1,0 +1,241 @@
+/* CSS Variables for TicTacToe Palette (light, modern) */
+:root {
+  --primary: #1976d2;
+  --accent: #ff4081;
+  --secondary: #424242;
+  --theme-bg: #fff;
+  --theme-txt: #212121;
+  --board-bg: #f9fafd;
+  --cell-bg: #fff;
+  --cell-hover: #f1faff;
+  --cell-border: #dee3e9;
+  --container-shadow: 0 4px 24px 0 rgba(60,75,100,0.11);
+}/* Main background for board area */
+.ttt-app-bg {
+  min-height: 100vh;
+  background: var(--theme-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--theme-txt);
+}
+.ttt-main {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 92vh;
+  width: 100vw;
+}
+
+/* Centered game area container */
+.ttt-game-area {
+  background: var(--board-bg);
+  padding: 32px 24px 20px 24px;
+  box-shadow: var(--container-shadow);
+  border-radius: 18px;
+  min-width: 330px;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s;
+}
+
+/* Menu styles */
+.ttt-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 28px;
+  background: var(--board-bg);
+  box-shadow: var(--container-shadow);
+  border-radius: 18px;
+  min-width: 290px;
+  max-width: 350px;
+  margin: 30px auto;
+}
+.ttt-title {
+  color: var(--primary);
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.25em;
+  letter-spacing: -1px;
+  text-align: center;
+}
+.ttt-subtitle {
+  color: var(--secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 1.6em 0;
+  text-align: center;
+}
+
+.ttt-footer {
+  font-size: 0.94rem;
+  margin-top: 2em;
+  color: var(--secondary);
+  opacity: 0.7;
+}
+.ttt-mode-btns {
+  display: flex;
+  justify-content: center;
+  gap: 1.2em;
+}
+
+/* Main board */
+.ttt-board {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-template-columns: repeat(3, auto);
+  gap: 0.23em;
+  background: var(--primary);
+  border-radius: 10px;
+  margin: 24px 0 10px 0;
+  box-shadow: 0 2px 12px 0 rgba(60,75,100,0.11);
+  padding: 0.2em;
+}
+.ttt-row {
+  display: flex;
+}
+
+/* Game cells */
+.ttt-cell {
+  width: 70px;
+  height: 70px;
+  font-size: 2.5rem;
+  font-family: inherit;
+  font-weight: 700;
+  border: none;
+  background: var(--cell-bg);
+  color: var(--primary);
+  margin: 0;
+  border-radius: 8px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--cell-border) inset;
+  transition: background 0.14s, color 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.ttt-cell:enabled:hover, .ttt-cell:enabled:focus {
+  background: var(--cell-hover);
+  box-shadow: 0 0 0 3px var(--accent) inset;
+  z-index: 2;
+}
+.ttt-cell[disabled] {
+  opacity: 0.64;
+}
+
+/* Board responsive sizing */
+@media (max-width: 540px) {
+  .ttt-board {
+    margin: 18px 0 6px 0;
+  }
+  .ttt-cell {
+    width: 54px !important;
+    height: 54px !important;
+    font-size: 1.6rem !important;
+  }
+  .ttt-main, .ttt-game-area, .ttt-menu {
+    min-width: 210px !important;
+    max-width: 99vw !important;
+    padding-left: 4vw;
+    padding-right: 4vw;
+  }
+}
+
+.ttt-mode-label {
+  margin-bottom: 2px;
+  margin-top: 0.4em;
+  font-size: 0.97rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+.ttt-pill {
+  display: inline-block;
+  padding: 0.22em 1.1em 0.22em 1.1em;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 99px;
+  font-size: 1em;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  margin-bottom: 0.7em;
+}
+
+.ttt-controls {
+  margin-top: 1.7em;
+  display: flex;
+  flex-direction: row;
+  gap: 1.3em;
+  justify-content: center;
+}
+
+.ttt-btn {
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55em 1.8em;
+  margin: 0 0.3em;
+  box-shadow: 0 2px 8px 0 rgba(60,75,100,0.07);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.13s, box-shadow 0.12s;
+}
+.ttt-btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.ttt-btn-primary:hover { background: #1681fa; }
+.ttt-btn-secondary {
+  background: var(--secondary);
+  color: #fff;
+}
+.ttt-btn-secondary-outline {
+  background: #fff;
+  border: 2px solid var(--secondary);
+  color: var(--secondary);
+  font-weight: 700;
+}
+.ttt-btn-secondary-outline:hover, .ttt-btn-secondary-outline:focus {
+  border-color: var(--primary);
+  background: #eaf3fb;
+  color: var(--primary);
+}
+.ttt-btn-accent {
+  background: var(--accent);
+  color: #fff;
+}
+.ttt-btn-accent:hover {
+  background: #f32072;
+}
+.ttt-winner {
+  font-weight: bold;
+  font-size: 1.5em;
+  color: var(--primary);
+}
+.ttt-winner-O {
+  color: var(--accent);
+}
+
+/* Result & message styles */
+.ttt-message {
+  font-size: 1.2rem;
+  margin: 1.1em 0 0.35em 0;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: center;
+  letter-spacing: 0.4px;
+}
+.ttt-result {
+  font-size: 1.5em;
+  color: var(--secondary);
+  text-align: center;
+  margin: 0.45em 0 0.05em 0;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
