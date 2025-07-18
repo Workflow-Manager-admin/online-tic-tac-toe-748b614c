@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import { getOpenAIMove } from "./openaiTicTacToe";
 
 /**
  * Color palette used in UI:
@@ -59,6 +60,8 @@ export default function App() {
   const [winner, setWinner] = useState(null);
   const [message, setMessage] = useState("");
   const [theme] = useState("light"); // Keep only light theme for this app.
+  const [aiLoading, setAiLoading] = useState(false);
+  const [usingOpenAI, setUsingOpenAI] = useState(false);
 
   // Always apply custom theme variables for palette
   useEffect(() => {
@@ -77,7 +80,15 @@ export default function App() {
     setBoard(Array(9).fill(null));
     setWinner(null);
     setXIsNext(true);
-    setMessage(selected === "computer" ? "Your turn (X)" : "Player X's turn");
+    setAiLoading(false);
+    // If OpenAI API key is present, use it for 'computer' mode moves
+    if (selected === "computer" && process.env.REACT_APP_OPENAI_API_KEY) {
+      setUsingOpenAI(true);
+      setMessage("Your turn (X) [vs OpenAI]");
+    } else {
+      setUsingOpenAI(false);
+      setMessage(selected === "computer" ? "Your turn (X)" : "Player X's turn");
+    }
   }
   // PUBLIC_INTERFACE
   // Reset current game (same mode)
@@ -117,36 +128,65 @@ export default function App() {
     if (win) {
       setWinner(win);
       setStatus("game_over");
+      setAiLoading(false);
       setMessage(mode === "computer"
-        ? (win === "X" ? "You win! 🎉" : "Computer wins! 🤖")
+        ? (win === "X" ? "You win! 🎉" : (usingOpenAI ? "OpenAI wins! 🤖" : "Computer wins! 🤖"))
         : `Player ${win} wins! 🎉`);
       return;
     }
     if (getAvailableMoves(board).length === 0 && status === "playing") {
       setWinner(null);
       setStatus("game_over");
+      setAiLoading(false);
       setMessage("It's a draw!");
       return;
     }
-    // If computer mode and it's O's turn, play AI
+
+    // If computer mode, O's turn, and playing
     if (mode === "computer" && !xIsNext && status === "playing") {
-      const move = bestMove(board, "O", "X");
-      setTimeout(() => {
-        // Only do if game not ended since timeout started
-        setBoard((cur) => {
-          if (cur !== board) return cur;
-          const updated = [...cur];
-          updated[move] = "O";
-          return updated;
-        });
-        setXIsNext(true);
-      }, 600); // Small artificial delay for realism
+      // If OpenAI integration, call it; otherwise use bestMove
+      async function handleOpenAIMove() {
+        setAiLoading(true);
+        let move;
+        try {
+          move = await getOpenAIMove(board, "O");
+        } catch (e) {
+          // fallback to local AI if OpenAI fails
+          move = bestMove(board, "O", "X");
+        }
+        setTimeout(() => {
+          setBoard((cur) => {
+            // Only update if the board hasn't changed
+            if (cur !== board) return cur;
+            const updated = [...cur];
+            updated[move] = "O";
+            return updated;
+          });
+          setXIsNext(true);
+          setAiLoading(false);
+        }, 750); // Small delay for realism
+      }
+      if (usingOpenAI) {
+        setMessage("OpenAI is thinking...");
+        handleOpenAIMove();
+      } else {
+        const move = bestMove(board, "O", "X");
+        setTimeout(() => {
+          setBoard((cur) => {
+            if (cur !== board) return cur;
+            const updated = [...cur];
+            updated[move] = "O";
+            return updated;
+          });
+          setXIsNext(true);
+        }, 600);
+      }
     } else if (mode === "computer" && xIsNext && status === "playing") {
-      setMessage("Your turn (X)");
+      setMessage("Your turn (X)" + (usingOpenAI ? " [vs OpenAI]" : ""));
     } else if (mode === "two-player" && status === "playing") {
       setMessage(`Player ${xIsNext ? "X" : "O"}'s turn`);
     }
-  }, [board, mode, status, xIsNext]);
+  }, [board, mode, status, xIsNext, usingOpenAI]);
 
   // --- UI COMPONENTS ---
   function renderMenu() {
@@ -197,7 +237,7 @@ export default function App() {
 
   function renderBoard() {
     return (
-      <div className="ttt-board" data-testid="ttt-board">
+      <div className="ttt-board" data-testid="ttt-board" style={aiLoading ? {opacity: 0.7, pointerEvents: "none"} : {}}>
         {[0, 1, 2].map((row) => (
           <div className="ttt-row" key={row}>
             {renderCell(row * 3 + 0)}
@@ -205,6 +245,15 @@ export default function App() {
             {renderCell(row * 3 + 2)}
           </div>
         ))}
+        {aiLoading &&
+          <div style={{
+            position: "absolute", left: 0, right: 0, top: "-18px", textAlign: "center", color: "#424242", fontWeight: 600
+          }}>
+            <span role="status" data-testid="ai-spinner" style={{background: "white", fontSize: "1.07em", padding: "0.18em 1em", borderRadius: "18px", border: "1px solid #dee3e9"}}>
+              <span className="ttt-loader" style={{marginRight: "6px"}}>🤖</span> AI thinking...
+            </span>
+          </div>
+        }
       </div>
     );
   }
