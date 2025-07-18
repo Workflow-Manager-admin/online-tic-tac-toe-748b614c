@@ -65,11 +65,12 @@ export default function App() {
 
   // Always apply custom theme variables for palette
   useEffect(() => {
-    document.documentElement.style.setProperty('--primary', "#1976d2");
-    document.documentElement.style.setProperty('--accent', "#ff4081");
-    document.documentElement.style.setProperty('--secondary', "#424242");
-    document.documentElement.style.setProperty('--theme-bg', "#fff");
-    document.documentElement.style.setProperty('--theme-txt', "#212121");
+    // Updated palette: teal, amber, blue-gray
+    document.documentElement.style.setProperty('--primary', "#00897b");
+    document.documentElement.style.setProperty('--accent', "#ffb300");
+    document.documentElement.style.setProperty('--secondary', "#455a64");
+    document.documentElement.style.setProperty('--theme-bg', "#fafcfb");
+    document.documentElement.style.setProperty('--theme-txt', "#20262c");
   }, []);
 
   // PUBLIC_INTERFACE
@@ -204,7 +205,7 @@ export default function App() {
         </div>
         <footer className="ttt-footer">
           <span>
-            <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer" style={{ color: "#1976d2", textDecoration: "none" }}>Built with React</a>
+            <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer" style={{ color: "var(--primary)", textDecoration: "none" }}>Built with React</a>
           </span>
         </footer>
       </div>

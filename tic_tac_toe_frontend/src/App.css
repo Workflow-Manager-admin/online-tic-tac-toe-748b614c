@@ -1,16 +1,18 @@
 /* CSS Variables for TicTacToe Palette (light, modern) */
 :root {
-  --primary: #1976d2;
-  --accent: #ff4081;
-  --secondary: #424242;
-  --theme-bg: #fff;
-  --theme-txt: #212121;
-  --board-bg: #f9fafd;
-  --cell-bg: #fff;
-  --cell-hover: #f1faff;
-  --cell-border: #dee3e9;
-  --container-shadow: 0 4px 24px 0 rgba(60,75,100,0.11);
-}/* Main background for board area */
+  /* New palette for modern look */
+  --primary: #00897b;     /* teal-green */
+  --accent: #ffb300;      /* vibrant amber */
+  --secondary: #455a64;   /* blue-gray */
+  --theme-bg: #fafcfb;    /* soft light */
+  --theme-txt: #20262c;
+  --board-bg: #e8f5e9;
+  --cell-bg: #fafdfc;
+  --cell-hover: #dcffe4;
+  --cell-border: #cfd8dc;
+  --container-shadow: 0 4px 24px 0 rgba(44,60,80,0.07);
+}
+/* Main background for board area */
 .ttt-app-bg {
   min-height: 100vh;
   background: var(--theme-bg);
